@@ -72,9 +72,24 @@ public class Heap
      * Return the minimal HeapNode, null if empty.
      *
      */
-    public HeapNode findMin()
-    {
-        return null; // should be replaced by student code
+    public HeapNode findMin(){ //finished, tested
+        int curr_min = Integer.MAX_VALUE;
+        HeapNode min_node = this.min;
+        HeapNode curr = this.min;
+        if (curr == null) {
+            return null;
+        }
+        while (true) {
+            if (curr.key < curr_min) {
+                curr_min = curr.key;
+                min_node = curr;
+            }
+            curr = curr.next;
+            if (curr == this.min) {
+                break; // we have traversed the entire root list
+            }
+        }
+        return min_node; 
     }
 
     /**
