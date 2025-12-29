@@ -212,11 +212,33 @@ public class Heap
      * pre: heap2.lazyMelds = this.lazyMelds AND heap2.lazyDecreaseKeys = this.lazyDecreaseKeys
      *
      */
-    public void meld(Heap heap2)
-    {
-        return; // should be replaced by student code           
+    public void lazyMeld(Heap heap2){ //finished, not tested
+        //used if lazy melds is true
+        this.size += heap2.size;
+        this.numMarked += heap2.numMarked;
+        this.totalLinks += heap2.totalLinks;
+        this.totalCuts += heap2.totalCuts;
+        this.totalHeapifyCosts += heap2.totalHeapifyCosts;
+
+        //updating roots pointers
+        if (this.min == null){ //if this heap is empty
+            this.roots = heap2.roots;
+        }
+        else if (heap2.min != null){ //if heap2 is not empty
+            //link the two roots lists
+            HeapNode this_min_prev = this.min.prev;
+            HeapNode heap2_min_prev = heap2.min.prev;
+
+            this.min.prev = heap2_min_prev;
+            heap2_min_prev.next = this.min;
+
+            heap2.min.prev = this_min_prev;
+            this_min_prev.next = heap2.min;
+        }
+        if (this.min == null || (heap2.min != null && heap2.min.key < this.min.key)){
+            this.min = heap2.min;
+        }
     }
-    
     
     /**
      * 
