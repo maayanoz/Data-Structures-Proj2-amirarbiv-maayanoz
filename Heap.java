@@ -176,6 +176,27 @@ public class Heap
 
     /**
      * 
+     * @param x
+     * 
+     * pre: x is a node in the heap
+     * swap x with his parent
+     * 
+    */ 
+    private void swapWithParent(HeapNode x) {
+        int p_key = x.parent.key;
+        String p_val = x.parent.info;
+        int x_key = x.key;
+        String x_val = x.info;
+        x.parent.key = x_key;
+        x.parent.info = x_val;
+        x.key = p_key;
+        x.info = p_val;
+    }
+
+
+
+    /**
+     * @param x
      * Delete the x from the heap.
      *
      */
