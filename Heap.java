@@ -5,12 +5,21 @@
  * with the possibility of not performing lazy melds and 
  * the possibility of not performing lazy decrease keys.
  *
+ * 
+ * TODO: meld, deleteMin, insert, decreaseKey, delete
  */
 public class Heap
 {
     public final boolean lazyMelds;
     public final boolean lazyDecreaseKeys;
     public HeapNode min;
+    private int roots;
+    private int size;
+    private int numMarked;
+    private int totalLinks;
+    private int totalCuts;
+    private int totalHeapifyCosts;
+
     
     /**
      *
@@ -21,7 +30,13 @@ public class Heap
     {
         this.lazyMelds = lazyMelds;
         this.lazyDecreaseKeys = lazyDecreaseKeys;
-        // student code can be added here
+        this.min = null;
+        this.roots = 0;
+        this.size = 0;
+        this.numMarked = 0;
+        this.totalLinks = 0;
+        this.totalCuts = 0;
+        this.totalHeapifyCosts = 0;
     }
 
     /**
