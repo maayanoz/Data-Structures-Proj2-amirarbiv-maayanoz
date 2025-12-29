@@ -245,9 +245,8 @@ public class Heap
      * Return the number of elements in the heap
      *   
      */
-    public int size()
-    {
-        return 46; // should be replaced by student code
+    public int size(){
+        return size; // should be replaced by student code
     }
 
 
@@ -258,7 +257,7 @@ public class Heap
      */
     public int numTrees()
     {
-        return 46; // should be replaced by student code
+        return roots.length;
     }
     
     
@@ -267,9 +266,8 @@ public class Heap
      * Return the number of marked nodes in the heap.
      * 
      */
-    public int numMarkedNodes()
-    {
-        return 46; // should be replaced by student code
+    public int numMarkedNodes(){
+        return numMarked;
     }
     
     
@@ -278,9 +276,8 @@ public class Heap
      * Return the total number of links.
      * 
      */
-    public int totalLinks()
-    {
-        return 46; // should be replaced by student code
+    public int totalLinks(){
+        return totalLinks;
     }
     
     
@@ -289,9 +286,8 @@ public class Heap
      * Return the total number of cuts.
      * 
      */
-    public int totalCuts()
-    {
-        return 46; // should be replaced by student code
+    public int totalCuts(){
+        return totalCuts;
     }
     
 
@@ -300,9 +296,8 @@ public class Heap
      * Return the total heapify costs.
      * 
      */
-    public int totalHeapifyCosts()
-    {
-        return 46; // should be replaced by student code
+    public int totalHeapifyCosts(){
+        return totalHeapifyCosts; // should be replaced by student code
     }
     
     
@@ -314,8 +309,8 @@ public class Heap
         public int key;
         public String info;
         public HeapNode child;
-        public HeapNode next;
-        public HeapNode prev;
+        public HeapNode next = this;
+        public HeapNode prev = this;
         public HeapNode parent;
         public int rank;
     }
