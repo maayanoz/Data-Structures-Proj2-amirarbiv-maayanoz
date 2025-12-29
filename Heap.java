@@ -109,6 +109,26 @@ public class Heap
      * Decrease the key of x by diff and fix the heap.
      * 
      */
+    public void decreaseKey(HeapNode x, int diff){ //finished, not tested
+        x.key -= diff;
+        if (x.parent == null) {
+            this.min = this.findMin();
+            return;
+        }
+        if (x.key < x.parent.key) {
+            // cut x from its parent
+            if (this.lazyDecreaseKeys) {
+                cut(x);
+            }
+            else{
+               //non-lazy decrease key
+            heapifyUp(x); 
+            }
+        }
+        HeapNode new_min = this.findMin();
+        this.min = new_min;
+    }
+
     private void heapifyUp(HeapNode x) { //helping method, tested
         // heapify up until x is smaller than two its children
         while (x.parent != null && x.key < x.parent.key) {
