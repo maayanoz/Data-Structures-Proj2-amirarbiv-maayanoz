@@ -399,6 +399,87 @@ public class Heap
         //     }
         // }
     }
+
+
+    private void add_to_rank_array(HeapNode curr, HeapNode[] rankArray) { //helping method for succesive linking, somtimes recursive
+        if (rankArray[curr.rank] == null) { //no tree with the same rank
+            rankArray[curr.rank] = curr;
+            return;
+        }
+        //unnecessary check
+        // if (rankArray[curr.rank] == curr) { //already added 
+        //     return;
+        // }
+        //there is already a tree with the same rank
+        HeapNode other = rankArray[curr.rank];
+        //remove other from rankArray
+        rankArray[curr.rank] = null; 
+        //link curr and other
+        HeapNode linked = link(curr, other);
+        //create new bigger copy of rankArray if needed
+        if (linked.rank >= rankArray.length){
+            //create new copy
+            HeapNode[] newRankArray = new HeapNode[rankArray.length * 2];
+            //copy old array to new array
+            for (int i = 0; i < rankArray.length; i++) {
+                newRankArray[i] = rankArray[i];
+            }
+            rankArray = newRankArray;
+        }
+        
+        //add linked to rankArray
+        add_to_rank_array(linked, rankArray);
+        }
+    
+    private HeapNode link(HeapNode a, HeapNode b) { //helping method for succesive linking, links two trees of same rank
+        //link a and b, return the new root
+        this.totalLinks++;
+        if (a.key < b.key) {
+            //make b a child of a
+            //updating a's children pointers
+            a = add_child(a, b);
+            return a;
+
+        } else {
+            //make a a child of b
+            //updating b's children pointers
+            b = add_child(b, a);
+            return b;
+        }
+    }
+    
+    public HeapNode add_child (HeapNode parent, HeapNode child){
+        //add child to parent's children list
+        if (parent.child == null) {
+                parent.child = child;
+                child_seper(parent, child);
+                child.next = child;
+                child.prev = child;
+            } else { //if parent already has children
+                child_seper(parent, child);
+                parent.child.prev.next = child;
+                child.prev = parent.child.prev;
+                parent.child.prev = child;
+                child.next = parent.child;
+            }
+            child.parent = parent;
+            parent.rank++;
+            return parent;
+        }
+    
+        private void child_seper(HeapNode parent, HeapNode child){ //helping method for add_child
+            if (child.next != child) { //if child is not alone in its list
+                    child.prev.next = parent;
+                    child.next.prev = parent;
+                    parent.next = child.next;
+                    parent.prev = child.prev;
+                }
+                else{ //if child is alone in its list
+                    parent.next = parent;
+                    parent.prev = parent;
+                }
+        }
+
     /**
      * 
      * Return the number of elements in the heap
