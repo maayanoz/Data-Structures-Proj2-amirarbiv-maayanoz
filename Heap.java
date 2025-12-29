@@ -93,9 +93,44 @@ public class Heap
      * Delete the minimal item.
      *
      */
-    public void deleteMin()
-    {
-        return; // should be replaced by student code
+    public void deleteMin(){ //with succesive linking
+        if (this.min == null) {
+            return; // heap is empty
+        }
+        this.roots--; //removing one root
+        this.size--; //removing min node
+        HeapNode old_min = this.min; //store old min
+        //remove old_min from root list
+        if (old_min.next != old_min) { //if there are other roots
+            if(old_min.child != null){ //if old_min has children
+                //link old_min's children to root list
+                HeapNode child = old_min.child;
+                old_min.prev.next = child;
+                child.prev = old_min.prev;
+                old_min.next.prev = child.prev;
+                child.prev.next = old_min.next;
+                this.min = old_min.next;
+            }
+            else{ //if old_min has no children
+                old_min.prev.next = old_min.next;
+                old_min.next.prev = old_min.prev;
+                this.min = old_min.next;
+            }
+            //find new min
+            
+            this.min = this.findMin(); 
+            //perform succesive linking
+            this.succsesive_linking(this);//bug here
+        }
+        else{ //if old_min is the only root
+            this.min = null;
+            if(old_min.child != null){ //if old_min has children
+                //make old_min's children the new root list
+                this.min = old_min.child;
+                //perform succesive linking
+                this.succsesive_linking(this);
+            }
+        }
     }
 
     /**
