@@ -200,9 +200,9 @@ public class Heap
      * Delete the x from the heap.
      *
      */
-    public void delete(HeapNode x) 
-    {    
-        return; // should be replaced by student code
+    public void delete(HeapNode x){
+        decreaseKey(x, Integer.MIN_VALUE);
+        deleteMin();
     }
 
 
