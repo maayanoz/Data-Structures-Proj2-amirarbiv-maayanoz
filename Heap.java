@@ -13,12 +13,12 @@ public class Heap
     public final boolean lazyMelds;
     public final boolean lazyDecreaseKeys;
     public HeapNode min;
-    private int roots;
-    private int size;
-    private int numMarked;
-    private int totalLinks;
-    private int totalCuts;
-    private int totalHeapifyCosts;
+    private int roots; //number of trees in the heap
+    private int size; //all nodes in the heap
+    private int numMarked; //in lazy decrease keys
+    private int totalLinks; //in succesive linking
+    private int totalCuts; //in lazy decrease keys
+    private int totalHeapifyCosts; //in non-lazy decrease keys
 
     
     /**
@@ -26,8 +26,8 @@ public class Heap
      * Constructor to initialize an empty heap.
      *
      */
-    public Heap(boolean lazyMelds, boolean lazyDecreaseKeys)
-    {
+    public Heap(boolean lazyMelds, boolean lazyDecreaseKeys){
+
         this.lazyMelds = lazyMelds;
         this.lazyDecreaseKeys = lazyDecreaseKeys;
         this.min = null;
