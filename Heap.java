@@ -120,7 +120,7 @@ public class Heap
             
             this.min = this.findMin(); 
             //perform succesive linking
-            this.succsesive_linking(this);//bug here
+            this.succsesive_linking(this);
         }
         else{ //if old_min is the only root
             this.min = null;
@@ -270,13 +270,14 @@ public class Heap
         this.totalLinks += heap2.totalLinks;
         this.totalCuts += heap2.totalCuts;
         this.totalHeapifyCosts += heap2.totalHeapifyCosts;
+        this.roots = this.roots + heap2.roots;
 
         if (lazyMelds){
             lazyMeld(heap2);
-            this.roots = this.roots + heap2.roots;
         }
-        else{
-            this.succsesive_linking(heap2);
+        else{ //eager meld
+            lazyMeld(heap2);//first link the two roots lists
+            this.succsesive_linking(this); //then perform succesive linking
         }
     }
 
@@ -321,10 +322,12 @@ public class Heap
         //perform linking
         HeapNode[] rankArray = new HeapNode[heap.roots*2]; //array to store trees by rank
         for (HeapNode node : rootsArray) {
+            node.prev = node;
+            node.next = node;
             add_to_rank_array(node, rankArray);
         }
         //rebuild the roots list from rankArray
-        int index = 0;
+        int index = 0; //index of first non-null in rankArray
         for (int i = 0; i < rankArray.length; i++) {
             if (rankArray[i] != null) {
                 heap.min = rankArray[i];
@@ -454,11 +457,11 @@ public class Heap
         //add child to parent's children list
         if (parent.child == null) {
                 parent.child = child;
-                child_seper(parent, child);
+                // child_seper(parent, child);
                 child.next = child;
                 child.prev = child;
             } else { //if parent already has children
-                child_seper(parent, child);
+                // child_seper(parent, child);
                 parent.child.prev.next = child;
                 child.prev = parent.child.prev;
                 parent.child.prev = child;
@@ -468,19 +471,20 @@ public class Heap
             parent.rank++;
             return parent;
         }
+    // maybe unnecessary
     
-        private void child_seper(HeapNode parent, HeapNode child){ //helping method for add_child
-            if (child.next != child) { //if child is not alone in its list
-                    child.prev.next = parent;
-                    child.next.prev = parent;
-                    parent.next = child.next;
-                    parent.prev = child.prev;
-                }
-                else{ //if child is alone in its list
-                    parent.next = parent;
-                    parent.prev = parent;
-                }
-        }
+        // private void child_seper(HeapNode parent, HeapNode child){ //helping method for add_child
+        //     if (child.next != child) { //if child is not alone in its list
+        //             child.prev.next = parent;
+        //             child.next.prev = parent;
+        //             parent.next = child.next;
+        //             parent.prev = child.prev;
+        //         }
+        //         else{ //if child is alone in its list
+        //             parent.next = parent;
+        //             parent.prev = parent;
+        //         }
+        // }
 
     /**
      * 
