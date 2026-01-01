@@ -206,7 +206,7 @@ public class Heap
                     //do nothing
                 }
                 //updating x's parent's child pointer
-                x.parent.rank = x.parent.rank - 1 - x.rank;
+                x.parent.rank = x.parent.rank - 1;
                 if (x.parent.child == x) { //if x is a child
                     if (x.next != x) { //if x has siblings
                         x.parent.child = x.next;
@@ -221,6 +221,7 @@ public class Heap
                 x.prev = x;
                 Heap to_meld = new Heap(this.lazyMelds, this.lazyDecreaseKeys);
                 to_meld.min = x;
+                to_meld.roots = 1;
                 this.meld(to_meld);
             }
     
@@ -344,6 +345,11 @@ public class Heap
         this.roots = 1;
         for(int i = index+1; i < rankArray.length; i++) { //add roots from rankArray to the roots list
             if (rankArray[i] == null) {
+                if (i == rankArray.length - 1) { //last node
+                    curr.next = heap.min;
+                    heap.min.prev = curr;
+                    break;
+                }
                 continue;
             }
             roots++;
@@ -358,10 +364,13 @@ public class Heap
                 curr = rankArray[i];   
             }
             else{ //last node
-                curr.next = heap.min;
-                heap.min.prev = curr;
+                curr.next = rankArray[i];
+                rankArray[i].prev = curr;
+                rankArray[i].next = heap.min;
+                heap.min.prev = rankArray[i];
             }
         }
+        heap.min = heap.findMin();
 
         //previous buggy attempt
 
