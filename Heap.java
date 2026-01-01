@@ -570,6 +570,255 @@ public class Heap
     }
 
     // // ============================================================
+    // //               EDGE CASE TESTING SUITE
+    // // ============================================================
+
+    // public static void main(String[] args) {
+    //     System.out.println("--- Starting EDGE CASE Tests ---");
+    //     try {
+    //         testEmptyHeapOperations();
+    //         testSingleNodeLifecycle();
+    //         testDuplicateKeys();
+    //         testExtremeValues();
+    //         testMeldWithEmpty();
+    //         testCascadingCutsDeep(); 
+    //         testDeleteArbitraryNodes();
+    //         testInterleavedOperations();
+            
+    //         System.out.println("\n>>> CONGRATULATIONS! ALL EDGE CASE TESTS PASSED! <<<");
+    //     } catch (Exception e) {
+    //         System.out.println("\n!!! TEST FAILED WITH EXCEPTION !!!");
+    //         e.printStackTrace();
+    //     }
+    // }
+
+    // /**
+    //  * מקרה קצה 1: פעולות על ערימה ריקה
+    //  * האם הקוד קורס כשמנסים למחוק מכלום?
+    //  */
+    // private static void testEmptyHeapOperations() {
+    //     System.out.print("Edge Case 1: Empty Heap Operations... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     if (heap.findMin() != null) fail("Min should be null for empty heap");
+    //     if (heap.size() != 0) fail("Size should be 0");
+    //     if (heap.numTrees() != 0) fail("Roots should be 0");
+        
+    //     // לא אמור לזרוק שגיאה
+    //     heap.deleteMin(); 
+        
+    //     if (heap.size() != 0) fail("Size should remain 0 after deleteMin on empty");
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 2: מחזור חיים של איבר בודד
+    //  * הכנסה -> בדיקה -> מחיקה -> בדיקה שחזרנו ל-0 נקי
+    //  */
+    // private static void testSingleNodeLifecycle() {
+    //     System.out.print("Edge Case 2: Single Node Lifecycle... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     HeapNode node = heap.insert(100, "Solo");
+        
+    //     if (heap.findMin() != node) fail("Min should be the single node");
+    //     if (node.next != node || node.prev != node) fail("Single node should point to itself");
+        
+    //     heap.deleteMin();
+        
+    //     if (heap.size() != 0) fail("Size should be 0 after deleting single node");
+    //     if (heap.min != null) fail("Min should be null");
+    //     if (heap.numTrees() != 0) fail("Roots should be 0");
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 3: כפילויות (Duplicates)
+    //  * ערימה עם מפתחות זהים. האם הסדר נשמר? האם כולם נמחקים?
+    //  */
+    // private static void testDuplicateKeys() {
+    //     System.out.print("Edge Case 3: Duplicate Keys... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     // הכנסת 5 איברים זהים
+    //     for (int i = 0; i < 5; i++) {
+    //         heap.insert(7, "Dup" + i);
+    //     }
+        
+    //     if (heap.size() != 5) fail("Size should be 5");
+    //     if (heap.findMin().key != 7) fail("Min key should be 7");
+        
+    //     // מחיקת כולם אחד אחד
+    //     for (int i = 0; i < 5; i++) {
+    //         heap.deleteMin();
+    //     }
+        
+    //     if (heap.size() != 0) fail("Heap should be empty after deleting all duplicates");
+    //     if (heap.min != null) fail("Min should be null");
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 4: ערכי קיצון (Integer.MAX_VALUE / MIN_VALUE)
+    //  * האם חישובים מתמטיים (כמו חיסור) גורמים ל-Overflow?
+    //  */
+    // private static void testExtremeValues() {
+    //     System.out.print("Edge Case 4: Extreme Values (Int boundaries)... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     heap.insert(Integer.MAX_VALUE, "Max");
+    //     heap.insert(Integer.MIN_VALUE, "Min"); // אם המימוש תומך בשליליים
+    //     heap.insert(0, "Zero");
+        
+    //     if (heap.findMin().key != Integer.MIN_VALUE) fail("Min should be Integer.MIN_VALUE");
+        
+    //     heap.deleteMin(); // Remove MIN_VALUE
+    //     if (heap.findMin().key != 0) fail("Next min should be 0");
+        
+    //     heap.deleteMin(); // Remove 0
+    //     if (heap.findMin().key != Integer.MAX_VALUE) fail("Last min should be MAX_VALUE");
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 5: Meld עם ערימות ריקות
+    //  * ריק+מלא, מלא+ריק, ריק+ריק
+    //  */
+    // private static void testMeldWithEmpty() {
+    //     System.out.print("Edge Case 5: Meld with Empty Heaps... ");
+    //     Heap h1 = new Heap(true, true);
+    //     Heap hEmpty = new Heap(true, true);
+        
+    //     // 1. Meld empty into empty
+    //     h1.meld(hEmpty);
+    //     if (h1.size() != 0) fail("Empty+Empty size should be 0");
+        
+    //     // 2. Meld empty into full
+    //     h1.insert(10, "A");
+    //     h1.meld(hEmpty);
+    //     if (h1.size() != 1) fail("Full+Empty size should be 1");
+        
+    //     // 3. Meld full into empty (should update min)
+    //     Heap h2 = new Heap(true, true);
+    //     h2.meld(h1); // h2 is empty, h1 has 1 node
+    //     if (h2.size() != 1) fail("Empty+Full size should be 1");
+    //     if (h2.findMin().key != 10) fail("Min should be updated after meld");
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 6: Cascading Cuts אמיתי (עומק העץ)
+    //  * יוצרים עץ עמוק, ומתחילים לקצוץ מלמטה למעלה כדי להפעיל את מנגנון הסימון.
+    //  */
+    // private static void testCascadingCutsDeep() {
+    //     System.out.print("Edge Case 6: Deep Cascading Cuts logic... ");
+    //     Heap heap = new Heap(true, true); // Lazy
+        
+    //     // בניית עץ עם 8 איברים
+    //     HeapNode[] nodes = new HeapNode[8];
+    //     for (int i = 0; i < 8; i++) {
+    //         nodes[i] = heap.insert(i, "#" + i);
+    //     }
+        
+    //     // מחיקת המינימום גורמת לאיחוד העצים לעץ בינומי (או כמה עצים)
+    //     heap.deleteMin(); 
+        
+    //     // כעת נחפש צומת שהוא *לא* שורש (כלומר, יש לו הורה).
+    //     // בערימה מאוחדת בגודל 7, חייבים להיות צמתים כאלה.
+    //     HeapNode nodeToCut = null;
+    //     for (int i = 1; i < 8; i++) { // מתחילים מ-1 כי 0 נמחק
+    //         if (nodes[i].parent != null) {
+    //             nodeToCut = nodes[i];
+    //             break; 
+    //         }
+    //     }
+        
+    //     if (nodeToCut == null) {
+    //         // זה מצב לא הגיוני מתמטית עבור ערימה מאוחדת בגודל 7, אבל ליתר ביטחון:
+    //         System.out.println("[Skipped: Could not find child node] ");
+    //         return;
+    //     }
+
+    //     int initialCuts = heap.totalCuts();
+        
+    //     // נקטין את המפתח שלו בצורה אגרסיבית כדי שיהיה קטן מהאבא שלו בוודאות
+    //     // (הופכים אותו לשלילי, האבא בטוח חיובי)
+    //     heap.decreaseKey(nodeToCut, nodeToCut.key + 500); 
+        
+    //     if (heap.totalCuts() <= initialCuts) {
+    //         fail("Should have performed a cut (Child Key: " + nodeToCut.key + ", Parent Key: " + (nodeToCut.parent != null ? nodeToCut.parent.key : "null") + ")");
+    //     }
+
+    //     System.out.println("PASS");
+    // }
+
+    // /**
+    //  * מקרה קצה 7: מחיקה של איבר שהוא לא המינימום (Arbitrary Delete)
+    //  * כולל מחיקה של שורש שאינו מינימום, ומחיקה של עלה.
+    //  */
+    // private static void testDeleteArbitraryNodes() {
+    //     System.out.print("Edge Case 7: Arbitrary Delete... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     HeapNode n10 = heap.insert(10, "A");
+    //     HeapNode n20 = heap.insert(20, "B");
+    //     HeapNode n30 = heap.insert(30, "C");
+        
+    //     // 1. מחיקת איבר אמצעי (20)
+    //     heap.delete(n20);
+    //     if (heap.size() != 2) fail("Size should be 2");
+    //     if (heap.findMin().key != 10) fail("Min should still be 10");
+        
+    //     // 2. מחיקת המינימום דרך delete (לא deleteMin)
+    //     heap.delete(n10);
+    //     if (heap.findMin().key != 30) fail("Min should be 30");
+        
+    //     // 3. מחיקת האיבר האחרון
+    //     heap.delete(n30);
+    //     if (heap.min != null) fail("Heap should be empty");
+
+    //     System.out.println("PASS");
+    // }
+    
+    // /**
+    //  * מקרה קצה 8: פעולות מעורבבות (Interleaved)
+    //  * לוודא שהמצב הפנימי נשאר יציב
+    //  */
+    // private static void testInterleavedOperations() {
+    //     System.out.print("Edge Case 8: Interleaved Ops (Stress)... ");
+    //     Heap heap = new Heap(true, true);
+        
+    //     heap.insert(50, "50");
+    //     HeapNode n20 = heap.insert(20, "20");
+    //     heap.deleteMin(); // del 20
+        
+    //     heap.insert(30, "30");
+    //     heap.insert(40, "40");
+    //     heap.decreaseKey(n20, 100); // זהירות! n20 כבר נמחק! המערכת לא אמורה לקרוס (תלוי במימוש)
+    //     // בדרך כלל אסור לגשת לצומת מחוק. אם המימוש שלך לא מגן מזה, נקפוץ על הבדיקה הזו.
+    //     // נבדוק משהו חוקי:
+        
+    //     HeapNode n30 = heap.findMin(); // 30
+    //     heap.decreaseKey(n30, 5); // 25
+    //     if (heap.findMin().key != 25) fail("Min should be 25");
+        
+    //     heap.delete(n30); // delete the new min
+    //     if (heap.findMin().key != 40) fail("Min should be 40"); // 50 is left
+
+    //     System.out.println("PASS");
+    // }
+
+    // // פונקציית עזר לזריקת שגיאות
+    // private static void fail(String message) {
+    //     throw new RuntimeException(message);
+    // }
+
+    // // ============================================================
     // //               TESTING SECTION (Main & Helpers)
     // // ============================================================
 
@@ -763,6 +1012,9 @@ public class Heap
     //     System.out.println("FAIL: " + msg);
     // }
 
+// ============================================================
+//     //     BASIC TESTS: INSERT & FINDMIN + DECREASEKEY & CUT 
+// ============================================================
 
 //     public static void main(String[] args) { //test insert and findMin
 //         //test cut
@@ -851,151 +1103,151 @@ public class Heap
 //         //test heapifyUp
 //         //build a small heap manually
 //     }
-// ============================================================
-    //        ADVANCED TESTS: FIELDS & CONFIGURATIONS
-    // ============================================================
+// //     ============================================================
+// //            ADVANCED TESTS: FIELDS & CONFIGURATIONS
+// //     ============================================================
 
-    // public static void main(String[] args) {
-    //     System.out.println("--- Starting Internal Tests for Heap ---");
+//     public static void main(String[] args) {
+//         System.out.println("--- Starting Internal Tests for Heap ---");
         
-    //     testAdvancedScenarios();
-    // }
-    // // ============================================================
-    // //        ADVANCED TESTS: FIELDS & CONFIGURATIONS
-    // // ============================================================
+//         testAdvancedScenarios();
+//     }
+//     // ============================================================
+//     //        ADVANCED TESTS: FIELDS & CONFIGURATIONS
+//     // ============================================================
 
-    // public static void testAdvancedScenarios() {
-    //     System.out.println("--- Starting Advanced Field & Config Tests ---");
+//     public static void testAdvancedScenarios() {
+//         System.out.println("--- Starting Advanced Field & Config Tests ---");
         
-    //     testFieldMaintenance();
-    //     testConfig_LazyMeld_LazyDecKey();       // (true, true)
-    //     testConfig_EagerMeld_LazyDecKey();      // (false, true)
-    //     testConfig_LazyMeld_EagerDecKey();      // (true, false)
-    //     testConfig_EagerMeld_EagerDecKey();     // (false, false)
+//         testFieldMaintenance();
+//         testConfig_LazyMeld_LazyDecKey();       // (true, true)
+//         testConfig_EagerMeld_LazyDecKey();      // (false, true)
+//         testConfig_LazyMeld_EagerDecKey();      // (true, false)
+//         testConfig_EagerMeld_EagerDecKey();     // (false, false)
         
-    //     System.out.println("\n--- All Advanced Tests Finished Successfully ---");
-    // }
+//         System.out.println("\n--- All Advanced Tests Finished Successfully ---");
+//     }
 
-    // private static void testFieldMaintenance() {
-    //     System.out.print("Test 1: Field Maintenance (Size, Roots, Links)... ");
-    //     Heap heap = new Heap(true, true);
+//     private static void testFieldMaintenance() {
+//         System.out.print("Test 1: Field Maintenance (Size, Roots, Links)... ");
+//         Heap heap = new Heap(true, true);
 
-    //     heap.insert(10, "A");
-    //     heap.insert(20, "B");
-    //     heap.insert(30, "C");
+//         heap.insert(10, "A");
+//         heap.insert(20, "B");
+//         heap.insert(30, "C");
         
-    //     if (heap.size() != 3) { printFail("Size should be 3"); return; }
-    //     if (heap.numTrees() != 3) { printFail("Roots should be 3 (Lazy Insert)"); return; }
+//         if (heap.size() != 3) { printFail("Size should be 3"); return; }
+//         if (heap.numTrees() != 3) { printFail("Roots should be 3 (Lazy Insert)"); return; }
 
-    //     int linksBefore = heap.totalLinks();
-    //     heap.deleteMin(); // מוחק 10
+//         int linksBefore = heap.totalLinks();
+//         heap.deleteMin(); // מוחק 10
         
-    //     if (heap.size() != 2) { printFail("Size should be 2 after delete"); return; }
-    //     if (heap.numTrees() != 1) { printFail("Roots should be 1 after consolidate"); return; }
-    //     if (heap.totalLinks() <= linksBefore) { printFail("TotalLinks should increase after consolidate"); return; }
+//         if (heap.size() != 2) { printFail("Size should be 2 after delete"); return; }
+//         if (heap.numTrees() != 1) { printFail("Roots should be 1 after consolidate"); return; }
+//         if (heap.totalLinks() <= linksBefore) { printFail("TotalLinks should increase after consolidate"); return; }
 
-    //     System.out.println("PASS");
-    // }
+//         System.out.println("PASS");
+//     }
 
-    // private static void testConfig_LazyMeld_LazyDecKey() {
-    //     System.out.print("Test 2: Config [LazyMelds=T, LazyDecKey=T]... ");
+//     private static void testConfig_LazyMeld_LazyDecKey() {
+//         System.out.print("Test 2: Config [LazyMelds=T, LazyDecKey=T]... ");
         
-    //     // Check Lazy Meld
-    //     Heap h1 = new Heap(true, true);
-    //     h1.insert(10, "A");
-    //     Heap h2 = new Heap(true, true);
-    //     h2.insert(20, "B");
+//         // Check Lazy Meld
+//         Heap h1 = new Heap(true, true);
+//         h1.insert(10, "A");
+//         Heap h2 = new Heap(true, true);
+//         h2.insert(20, "B");
         
-    //     int linksBefore = h1.totalLinks();
-    //     h1.meld(h2);
+//         int linksBefore = h1.totalLinks();
+//         h1.meld(h2);
         
-    //     if (h1.numTrees() != 2) { printFail("Lazy Meld should just add roots"); return; }
-    //     if (h1.totalLinks() != linksBefore) { printFail("Lazy Meld should NOT perform links"); return; }
+//         if (h1.numTrees() != 2) { printFail("Lazy Meld should just add roots"); return; }
+//         if (h1.totalLinks() != linksBefore) { printFail("Lazy Meld should NOT perform links"); return; }
 
-    //     // Check Lazy DecreaseKey (Cuts)
-    //     h1 = new Heap(true, true);
-    //     h1.insert(10, "min");
-    //     HeapNode n20 = h1.insert(20, "n20");
-    //     HeapNode n30 = h1.insert(30, "n30");
-    //     h1.deleteMin(); // 10 deleted, 20 and 30 merge
+//         // Check Lazy DecreaseKey (Cuts)
+//         h1 = new Heap(true, true);
+//         h1.insert(10, "min");
+//         HeapNode n20 = h1.insert(20, "n20");
+//         HeapNode n30 = h1.insert(30, "n30");
+//         h1.deleteMin(); // 10 deleted, 20 and 30 merge
         
-    //     HeapNode childNode = (n20.parent != null) ? n20 : n30;
-    //     int cutsBefore = h1.totalCuts();
-    //     int heapifyBefore = h1.totalHeapifyCosts();
+//         HeapNode childNode = (n20.parent != null) ? n20 : n30;
+//         int cutsBefore = h1.totalCuts();
+//         int heapifyBefore = h1.totalHeapifyCosts();
         
-    //     h1.decreaseKey(childNode, 100); 
+//         h1.decreaseKey(childNode, 100); 
         
-    //     if (h1.totalCuts() <= cutsBefore) { printFail("Lazy DecreaseKey should perform Cut"); return; }
-    //     if (h1.totalHeapifyCosts() != heapifyBefore) { printFail("Lazy DecreaseKey should NOT perform HeapifyUp"); return; }
+//         if (h1.totalCuts() <= cutsBefore) { printFail("Lazy DecreaseKey should perform Cut"); return; }
+//         if (h1.totalHeapifyCosts() != heapifyBefore) { printFail("Lazy DecreaseKey should NOT perform HeapifyUp"); return; }
 
-    //     System.out.println("PASS");
-    // }
+//         System.out.println("PASS");
+//     }
 
-    // private static void testConfig_EagerMeld_LazyDecKey() {
-    //     System.out.print("Test 3: Config [LazyMelds=F, LazyDecKey=T]... ");
+//     private static void testConfig_EagerMeld_LazyDecKey() {
+//         System.out.print("Test 3: Config [LazyMelds=F, LazyDecKey=T]... ");
         
-    //     Heap hA = new Heap(false, true);
-    //     hA.insert(10, "A"); 
+//         Heap hA = new Heap(false, true);
+//         hA.insert(10, "A"); 
         
-    //     Heap hB = new Heap(false, true);
-    //     hB.insert(20, "B"); 
+//         Heap hB = new Heap(false, true);
+//         hB.insert(20, "B"); 
         
-    //     int linksBefore = hA.totalLinks();
-    //     hA.meld(hB); 
-    //     if (hA.size() != 2) { printFail("Size check failed"); return; }
-    //     if (hA.numTrees() > 1) { printFail("Eager Meld should consolidate trees"); return; }
-    //     if (hA.totalLinks() <= linksBefore) { printFail("Eager Meld should perform links"); return; }
+//         int linksBefore = hA.totalLinks();
+//         hA.meld(hB); 
+//         if (hA.size() != 2) { printFail("Size check failed"); return; }
+//         if (hA.numTrees() > 1) { printFail("Eager Meld should consolidate trees"); return; }
+//         if (hA.totalLinks() <= linksBefore) { printFail("Eager Meld should perform links"); return; }
         
-    //     System.out.println("PASS");
-    // }
+//         System.out.println("PASS");
+//     }
 
-    // private static void testConfig_LazyMeld_EagerDecKey() {
-    //     System.out.print("Test 4: Config [LazyMelds=T, LazyDecKey=F]... ");
+//     private static void testConfig_LazyMeld_EagerDecKey() {
+//         System.out.print("Test 4: Config [LazyMelds=T, LazyDecKey=F]... ");
         
-    //     Heap h1 = new Heap(true, false);
-    //     h1.insert(10, "min");
-    //     HeapNode n20 = h1.insert(20, "parent");
-    //     HeapNode n30 = h1.insert(30, "child");
-    //     h1.deleteMin(); 
+//         Heap h1 = new Heap(true, false);
+//         h1.insert(10, "min");
+//         HeapNode n20 = h1.insert(20, "parent");
+//         HeapNode n30 = h1.insert(30, "child");
+//         h1.deleteMin(); 
         
-    //     HeapNode child = (n20.parent != null) ? n20 : n30;
-    //     int cutsBefore = h1.totalCuts();
-    //     int heapifyBefore = h1.totalHeapifyCosts();
+//         HeapNode child = (n20.parent != null) ? n20 : n30;
+//         int cutsBefore = h1.totalCuts();
+//         int heapifyBefore = h1.totalHeapifyCosts();
         
-    //     h1.decreaseKey(child, 100); 
+//         h1.decreaseKey(child, 100); 
         
-    //     if (h1.totalCuts() != cutsBefore) { printFail("Eager DecreaseKey should NOT perform Cuts"); return; }
-    //     if (h1.totalHeapifyCosts() <= heapifyBefore) { printFail("Eager DecreaseKey should perform HeapifyUp"); return; }
+//         if (h1.totalCuts() != cutsBefore) { printFail("Eager DecreaseKey should NOT perform Cuts"); return; }
+//         if (h1.totalHeapifyCosts() <= heapifyBefore) { printFail("Eager DecreaseKey should perform HeapifyUp"); return; }
 
-    //     System.out.println("PASS");
-    // }
+//         System.out.println("PASS");
+//     }
 
-    // private static void testConfig_EagerMeld_EagerDecKey() {
-    //     System.out.print("Test 5: Config [LazyMelds=F, LazyDecKey=F]... ");
+//     private static void testConfig_EagerMeld_EagerDecKey() {
+//         System.out.print("Test 5: Config [LazyMelds=F, LazyDecKey=F]... ");
         
-    //     Heap h1 = new Heap(false, false);
-    //     h1.insert(100, "A");
-    //     h1.insert(200, "B"); 
+//         Heap h1 = new Heap(false, false);
+//         h1.insert(100, "A");
+//         h1.insert(200, "B"); 
         
-    //     if (h1.numTrees() != 1) { printFail("Eager Insert/Meld should result in 1 tree"); return; }
+//         if (h1.numTrees() != 1) { printFail("Eager Insert/Meld should result in 1 tree"); return; }
         
-    //     HeapNode child = h1.min.child; 
-    //     if (child == null && h1.min.child != null) child = h1.min.child;
+//         HeapNode child = h1.min.child; 
+//         if (child == null && h1.min.child != null) child = h1.min.child;
         
-    //     if (child == null) {
-    //          // אם המבנה הפוך ממה שחשבנו (תלוי ב-Link), ננסה למצוא אותו ידנית
-    //          // לצורך הטסט נניח שהם חוברו
-    //     } else {
-    //         int heapifyBefore = h1.totalHeapifyCosts();
-    //         h1.decreaseKey(child, 2000); 
-    //         if (h1.totalHeapifyCosts() <= heapifyBefore) { printFail("Should perform HeapifyUp"); return; }
-    //     }
+//         if (child == null) {
+//              // אם המבנה הפוך ממה שחשבנו (תלוי ב-Link), ננסה למצוא אותו ידנית
+//              // לצורך הטסט נניח שהם חוברו
+//         } else {
+//             int heapifyBefore = h1.totalHeapifyCosts();
+//             h1.decreaseKey(child, 2000); 
+//             if (h1.totalHeapifyCosts() <= heapifyBefore) { printFail("Should perform HeapifyUp"); return; }
+//         }
         
-    //     System.out.println("PASS");
-    // }
+//         System.out.println("PASS");
+//     }
 
-    // // זו הפונקציה שהייתה חסרה:
-    // private static void printFail(String msg) {
-    //     System.out.println("FAIL: " + msg);
-    // }
+//     // זו הפונקציה שהייתה חסרה:
+//     private static void printFail(String msg) {
+//         System.out.println("FAIL: " + msg);
+//     }
     }
