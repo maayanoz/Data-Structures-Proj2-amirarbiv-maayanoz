@@ -44,6 +44,8 @@ public class Heap
      * pre: key > 0
      *
      * Insert (key,info) into the heap and return the newly generated HeapNode.
+     * 
+     * Time Complexity: O(1) amortized
      *
      */
     public HeapNode insert(int key, String info){ //finished, tested
@@ -66,6 +68,8 @@ public class Heap
     /**
      * 
      * Return the minimal HeapNode, null if empty.
+     * 
+     * Time Complexity: O(log n) - traverses root list which has at most log n nodes
      *
      */
     public HeapNode findMin(){ //finished, tested
@@ -91,6 +95,8 @@ public class Heap
     /**
      * 
      * Delete the minimal item.
+     * 
+     * Time Complexity: O(log n) amortized - includes successive linking
      *
      */
     public void deleteMin(){ //with succesive linking
@@ -139,6 +145,8 @@ public class Heap
      * 
      * Decrease the key of x by diff and fix the heap.
      * 
+     * Time Complexity: O(1) amortized with lazy decrease keys, O(log n) with non-lazy
+     * 
      */
     public void decreaseKey(HeapNode x, int diff){ //finished, tested
         x.key -= diff;
@@ -162,6 +170,7 @@ public class Heap
         this.min = new_min;
     }
 
+    // Time Complexity: O(1) amortized - constant work per cut with amortized analysis
     private void cascadingCuts(HeapNode y) { //helping method for decrease key, not tested
         if (y.parent == null) {
             return;
@@ -178,6 +187,7 @@ public class Heap
         }
     }
 
+    // Time Complexity: O(log n) - swaps with parent until heap property is satisfied
     private void heapifyUp(HeapNode x) { //helping method, tested
         // heapify up until x is smaller than two its children
         while (x.parent != null && x.key < x.parent.key) {
@@ -187,6 +197,7 @@ public class Heap
         }
     }
 
+    // Time Complexity: O(1) amortized - removes node and performs lazy meld
     private void cut(HeapNode x) { //helping method, cuts and melds back, tested
         // cut x from its parent and add it to the root list
                 this.totalCuts++;
@@ -233,6 +244,8 @@ public class Heap
      * pre: x is a node in the heap
      * swap x with his parent
      * 
+     * Time Complexity: O(1)
+     * 
     */ 
     private void swapWithParent(HeapNode x) {
         int p_key = x.parent.key;
@@ -253,6 +266,8 @@ public class Heap
     /**
      * @param x
      * Delete the x from the heap.
+     * 
+     * Time Complexity: O(log n) amortized
      *
      */
     public void delete(HeapNode x){ //just like in class
@@ -265,6 +280,8 @@ public class Heap
      * 
      * Meld the heap with heap2
      * pre: heap2.lazyMelds = this.lazyMelds AND heap2.lazyDecreaseKeys = this.lazyDecreaseKeys
+     * 
+     * Time Complexity: O(1) with lazy melds, O(log n) with eager melds
      *
      */
     public void meld(Heap heap2){ //finished, not tested
@@ -285,6 +302,7 @@ public class Heap
     }
 
 
+    // Time Complexity: O(1) - simply concatenates root lists
     public void lazyMeld(Heap heap2){ //finished, tested
         //used if lazy melds is true
         //updating roots pointers
@@ -308,6 +326,7 @@ public class Heap
     }
     
 
+    // Time Complexity: O(log n) amortized - consolidates trees by rank
     public void succsesive_linking(Heap heap){ //performs succesive linking in-place, not tested
         //count number of links
         //used if lazy melds is false
@@ -422,6 +441,7 @@ public class Heap
     }
 
 
+    // Time Complexity: O(log n) amortized - recursive linking of trees
     private void add_to_rank_array(HeapNode curr, HeapNode[] rankArray) { //helping method for succesive linking, somtimes recursive
         if (rankArray[curr.rank] == null) { //no tree with the same rank
             rankArray[curr.rank] = curr;
@@ -452,6 +472,7 @@ public class Heap
         add_to_rank_array(linked, rankArray);
         }
     
+    // Time Complexity: O(1) - links two trees by making smaller key the parent
     private HeapNode link(HeapNode a, HeapNode b) { //helping method for succesive linking, links two trees of same rank
         //link a and b, return the new root
         this.totalLinks++;
@@ -469,6 +490,7 @@ public class Heap
         }
     }
     
+    // Time Complexity: O(1) - adds child to parent's child list
     public HeapNode add_child (HeapNode parent, HeapNode child){
         //add child to parent's children list
         if (parent.child == null) {
@@ -505,6 +527,8 @@ public class Heap
     /**
      * 
      * Return the number of elements in the heap
+     * 
+     * Time Complexity: O(1)
      *   
      */
     public int size(){
@@ -515,6 +539,8 @@ public class Heap
     /**
      * 
      * Return the number of trees in the heap.
+     * 
+     * Time Complexity: O(1)
      * 
      */
     public int numTrees()
@@ -527,6 +553,8 @@ public class Heap
      * 
      * Return the number of marked nodes in the heap.
      * 
+     * Time Complexity: O(1)
+     * 
      */
     public int numMarkedNodes(){
         return numMarked;
@@ -536,6 +564,8 @@ public class Heap
     /**
      * 
      * Return the total number of links.
+     * 
+     * Time Complexity: O(1)
      * 
      */
     public int totalLinks(){
@@ -547,6 +577,8 @@ public class Heap
      * 
      * Return the total number of cuts.
      * 
+     * Time Complexity: O(1)
+     * 
      */
     public int totalCuts(){
         return totalCuts;
@@ -556,6 +588,8 @@ public class Heap
     /**
      * 
      * Return the total heapify costs.
+     * 
+     * Time Complexity: O(1)
      * 
      */
     public int totalHeapifyCosts(){
